@@ -5,7 +5,7 @@ use crate::renderer::Renderer;
 
 
 pub struct Shader<'a> {
-    obj: WebGlShader,
+    pub obj: WebGlShader,
     shader_type: u32,
     is_compiled: bool,
     has_errors: bool,
@@ -33,11 +33,31 @@ impl Shader<'_> {
         })
     }
 
-    pub fn compile(rend: &Renderer, source: &'a str) ->
-
 }
 
 struct ShaderProgram<'a> {
     obj: WebGlProgram,
     attached_shaders: Vec::<Rc::<Shader<'a>>>
+}
+
+impl ShaderProgram {
+    pub fn new<'a>(rend: &Renderer, shaders: &Vec::<Rc::<Shader>>) -> Result<ShaderProgram<'a>, String> {
+        let prog = rend.context.create_program().ok_or_else(|| String::from("Renderer unable to create a new shader program"))?;
+
+        for s in shaders {
+            rend.context.attach_shader(&prog, &s.obj);
+        }
+
+        if rend.context.get_shader_parameter(&program, WebGl2RenderingContext::LINK_STATUS)
+            .as_bool()
+            .unwrap_or_else(false)
+            {
+                Ok(ShaderProgram {
+                    obj: prog,
+                    attached_shaders: shaders.to_vec()
+                })
+            } else {
+                Err(String::from("Unable to link shader program"))
+            }
+    }
 }

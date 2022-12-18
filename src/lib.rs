@@ -40,6 +40,7 @@ pub fn start() -> Result<(), JsValue> {
     //    .dyn_into::<WebGl2RenderingContext>()?;
 
     let vshader = Shader::new(&rend, include_str!("shaders/simple.vert"), WebGl2RenderingContext::VERTEX_SHADER);
+    let fshader = Shader::new(&rend, include_str!("shaders/simple.frag"), WebGl2RenderingContext::FRAGMENT_SHADER);
 
     // context.viewport(0, 0, w as i32, h as i32);
 
