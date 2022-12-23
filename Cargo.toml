@@ -8,6 +8,7 @@ edition = "2018"
 crate-type = ["cdylib"]
 
 [dependencies]
+gltype_derive = { path = "gltype_derive/" }
 js-sys = "0.3.60"
 wasm-bindgen = "0.2.83"
 nalgebra = "0.31.4"

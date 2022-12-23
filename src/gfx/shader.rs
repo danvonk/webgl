@@ -1,8 +1,7 @@
 use web_sys::{WebGlShader, WebGlProgram, WebGl2RenderingContext};
 use std::rc::Rc;
 
-use crate::renderer::Renderer;
-
+use super::renderer::Renderer;
 
 pub struct Shader<'a> {
     pub obj: WebGlShader,
@@ -32,15 +31,15 @@ impl Shader<'_> {
                    source
         })
     }
-
 }
 
-struct ShaderProgram<'a> {
-    obj: WebGlProgram,
+
+pub struct ShaderProgram<'a> {
+    pub obj: WebGlProgram,
     attached_shaders: Vec::<Rc::<Shader<'a>>>
 }
 
-impl ShaderProgram {
+impl ShaderProgram<'_> {
     pub fn new<'a>(rend: &Renderer, shaders: &Vec::<Rc::<Shader>>) -> Result<ShaderProgram<'a>, String> {
         let prog = rend.context.create_program().ok_or_else(|| String::from("Renderer unable to create a new shader program"))?;
 
@@ -48,9 +47,11 @@ impl ShaderProgram {
             rend.context.attach_shader(&prog, &s.obj);
         }
 
-        if rend.context.get_shader_parameter(&program, WebGl2RenderingContext::LINK_STATUS)
+        rend.context.link_program(&prog);
+
+        if rend.context.get_program_parameter(&prog, WebGl2RenderingContext::LINK_STATUS)
             .as_bool()
-            .unwrap_or_else(false)
+            .unwrap_or(false)
             {
                 Ok(ShaderProgram {
                     obj: prog,

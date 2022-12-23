@@ -3,6 +3,8 @@ use wasm_bindgen::prelude::*;
 use wasm_bindgen::JsCast;
 use web_sys::{WebGl2RenderingContext, WebGlProgram, WebGlShader};
 
+use super::shader::ShaderProgram;
+
 pub struct Renderer {
     pub context: WebGl2RenderingContext,
 }
@@ -19,6 +21,10 @@ impl Renderer {
 
     pub fn set_viewport(&mut self, w: u32, h: u32) {
         self.context.viewport(0, 0, w as i32, h as i32);
+    }
+
+    pub fn use_program(&mut self, prog: &ShaderProgram) {
+        self.context.use_program(Some(&prog.obj));
     }
 
 }
