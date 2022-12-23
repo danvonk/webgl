@@ -1,7 +1,7 @@
 use web_sys::{WebGl2RenderingContext, WebGlProgram, WebGlShader, WebGlBuffer, WebGlVertexArrayObject};
 use std::rc::Rc;
 
-use super::{renderer::Renderer, types::gl_type, types::gl_size};
+use super::{renderer::Renderer};
 
 pub struct VertexAttribute<'a> {
     name: &'a str,
@@ -47,9 +47,12 @@ impl VertexBuffer<'_> {
             }
     }
 
-    pub fn push_attribute<T: super::types::GlType>(&mut self, val: T, name: &str) {
-        self.attrs.push(VertexAttribute { name: name, size: gl_size(val), type_: gl_type(val), normalized: false, stride: 0, offset: 0 })
+    pub fn set_attribute<T: super::types::GLType>(&mut self) {
+        self.attrs = T::vertex_attributes().iter().map(|v| {
+            VertexAttribute { name: &v.0, size: v.2, type_: v.1 as u32, normalized: false, stride: 0, offset: 0 }
+        }).collect();
     }
+
 }
 
 

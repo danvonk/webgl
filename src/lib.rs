@@ -4,14 +4,19 @@ use wasm_bindgen::JsCast;
 use web_sys::{WebGl2RenderingContext, WebGlProgram, WebGlShader};
 use std::rc::Rc;
 
-mod gfx;
+use gltype_derive::GLType;
 
+mod gfx;
 use gfx::mesh::{VertexArray, VertexBuffer};
 use gfx::shader::{Shader, ShaderProgram};
 use gfx::renderer::Renderer;
+use gfx::types::GLType;
 
+
+#[derive(GLType)]
 struct Vertex {
-    pos: [f32;2]
+    pos: [f32;2],
+    col: f32
 }
 
 
@@ -56,7 +61,7 @@ pub fn start() -> Result<(), JsValue> {
     ];
 
     vbuf.data(&rend, &vertices);
-    vbuf.push_attribute(0.5, "aPosition");
+    vbuf.set_attribute::<Vertex>();
 
     let varray = VertexArray::new(&rend)?;
 

@@ -132,8 +132,11 @@ dependencies = [
 name = "gltype_derive"
 version = "0.1.0"
 dependencies = [
+ "js-sys",
  "quote",
  "syn",
+ "wasm-bindgen",
+ "web-sys",
 ]
 
 [[package]]

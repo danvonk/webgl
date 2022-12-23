@@ -1,6 +1,7 @@
 use proc_macro::TokenStream;
 use quote::quote;
 use syn::{self, DeriveInput};
+use web_sys::WebGl2RenderingContext;
 
 #[proc_macro_derive(GLType)]
 pub fn gltype_derive(input: TokenStream) -> TokenStream {
@@ -44,8 +45,22 @@ fn impl_gltype_derive(ast: &syn::DeriveInput) -> TokenStream {
 fn impl_field_derive(field: &syn::Fields) -> Vec<(String, i32, i32)> {
     let vv: Vec<(String, i32, i32)> = field
         .iter()
-        .map(|f| (f.ident.clone().unwrap().to_string(), 1, 0))
+        .map(|f| (f.ident.clone().unwrap().to_string(), impl_gl_type(&f.ty), 0))
         .collect();
 
     vv
+}
+
+fn impl_gl_type(t: &syn::Type) -> i32 {
+    match t {
+        syn::Type::Verbatim(v) => {
+            match v.to_string().as_str() {
+                "f32" => WebGl2RenderingContext::FLOAT as i32,
+                "i32" => WebGl2RenderingContext::INT as i32,
+                "u32" => WebGl2RenderingContext::UNSIGNED_INT as i32,
+                _ => 0
+            }
+        },
+        _ => 0
+    }
 }
