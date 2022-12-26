@@ -64,3 +64,23 @@ fn impl_gl_type(t: &syn::Type) -> i32 {
         _ => 0
     }
 }
+
+fn impl_gl_components(t: &syn::Type) -> i32 {
+    match t {
+        syn::Type::Array(a) => {
+            match &a.len {
+                syn::Expr::Lit(el) => match &el.lit {
+                    syn::Lit::Str(s) => {
+                        match s.value().as_str() {
+                            "f32" => 1,
+                            _ => 0
+                        }
+                    },
+                    _ => 0
+                },
+                _ => 0
+            }
+        },
+    _ => 0
+    }
+}

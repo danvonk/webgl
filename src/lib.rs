@@ -50,7 +50,7 @@ pub fn start() -> Result<(), JsValue> {
     let prog = ShaderProgram::new(&rend, &vec![vshader, fshader])?;
     rend.use_program(&prog);
 
-    let vbuf = VertexBuffer::new(&rend)?;
+    let mut vbuf = VertexBuffer::new(&rend)?;
     let vertices = vec![
         -0.5, 0.5, // Top-let
         0.5, 0.5, // Top-right
@@ -63,24 +63,24 @@ pub fn start() -> Result<(), JsValue> {
     vbuf.data(&rend, &vertices);
     vbuf.set_attribute::<Vertex>();
 
-    let varray = VertexArray::new(&rend)?;
+    let _varray = VertexArray::new(&rend)?;
 
-    let position_attribute_location = context.get_attrib_location(&program, "position");
+    //let position_attribute_location = context.get_attrib_location(&program, "position");
 
-    context.vertex_attrib_pointer_with_i32(
-        position_attribute_location as u32,
-        2,
-        WebGl2RenderingContext::FLOAT,
-        false,
-        0,
-        0,
-    );
-    context.enable_vertex_attrib_array(position_attribute_location as u32);
+    //context.vertex_attrib_pointer_with_i32(
+    //    position_attribute_location as u32,
+    //    2,
+    //    WebGl2RenderingContext::FLOAT,
+    //    false,
+    //    0,
+    //    0,
+    //);
+    //context.enable_vertex_attrib_array(position_attribute_location as u32);
 
-    context.bind_vertex_array(Some(&vao));
+    //context.bind_vertex_array(Some(&vao));
 
-    let vert_count = (vertices.len() / 2) as i32;
-    draw(&context, vert_count);
+    //let vert_count = (vertices.len() / 2) as i32;
+    //draw(&context, vert_count);
 
     Ok(())
 }
